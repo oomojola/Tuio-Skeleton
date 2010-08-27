@@ -61,6 +61,7 @@ using Lbi.Macys;
 		private int window_top = 0;
 		private int screen_width = Screen.PrimaryScreen.Bounds.Width;
 		private int screen_height = Screen.PrimaryScreen.Bounds.Height;
+        private int capturePort = 0;
 
 		private bool fullscreen;
 		private bool verbose;
@@ -100,6 +101,7 @@ using Lbi.Macys;
 			client = new TuioClient(port);
 			client.addTuioListener(this);
 			client.connect();
+            capturePort = port;
             setupJoints();
 		}
         
@@ -171,8 +173,21 @@ using Lbi.Macys;
             {
                 storeCalibrationData();
             }
+            else if (e.KeyData == Keys.Space)
+            {
+                beginCapturePhoto();
+            }
 
  		}
+
+
+        public void beginCapturePhoto()
+        {
+            OSC.NET.OSCMessage m = new OSC.NET.OSCMessage("camera_off");
+            OSC.NET.OSCTransmitter t = new OSC.NET.OSCTransmitter("localhost", capturePort+1);
+            t.Connect();
+            t.Send(m);
+        }
 
 		private void Form_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
