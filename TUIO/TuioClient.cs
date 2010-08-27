@@ -440,7 +440,14 @@ namespace TUIO
 					frameCursors.Clear();
 				}
 
-			}
+            }
+            else if (address == "/camera/status")
+            {
+						for (int i=0;i<listenerList.Count;i++) {
+							TuioListener listener = (TuioListener)listenerList[i];
+                            if (listener != null) listener.cameraStatusChange(command == "on" ? true : false);
+						}
+            }
 		}
 
 		/**

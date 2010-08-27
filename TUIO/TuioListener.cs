@@ -91,5 +91,11 @@ namespace TUIO
 		 * @param  ftime  the TuioTime associated to the current TUIO message bundle
 		 */
 		void refresh(TuioTime ftime);
+
+
+        /**
+         *  This callback method is invoked wghen the camera status changes
+         */
+        void cameraStatusChange(bool currentState);
 	}
 }

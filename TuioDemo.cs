@@ -65,6 +65,7 @@ using Lbi.Macys;
 
 		private bool fullscreen;
 		private bool verbose;
+        private int cameraStatus;
 
 		SolidBrush blackBrush = new SolidBrush(Color.Black);
 		SolidBrush whiteBrush = new SolidBrush(Color.White);
@@ -79,6 +80,7 @@ using Lbi.Macys;
 
 			verbose = false;
 			fullscreen = false;
+            cameraStatus = -1 ;
 			width = window_width;
 			height = window_height;
 
@@ -103,7 +105,7 @@ using Lbi.Macys;
 			client.connect();
             capturePort = port;
             setupJoints();
-		}
+ 	}
         
         /**
          * Setup Block Analyzers for each Joint
@@ -177,8 +179,20 @@ using Lbi.Macys;
             {
                 beginCapturePhoto();
             }
+            else if (e.KeyData == Keys.Enter)
+            {
+                doneCapturePhoto();
+            }
 
  		}
+
+        public void doneCapturePhoto()
+        {
+            OSC.NET.OSCMessage m = new OSC.NET.OSCMessage("camera_on");
+            OSC.NET.OSCTransmitter t = new OSC.NET.OSCTransmitter("localhost", capturePort + 1);
+            t.Connect();
+            t.Send(m);
+        }
 
 
         public void beginCapturePhoto()
@@ -253,6 +267,11 @@ using Lbi.Macys;
 		public void refresh(TuioTime frameTime) {
 			Invalidate();
 		}
+
+        public void cameraStatusChange(bool currentState)
+        {
+            cameraStatus = currentState ? 1 : 0 ;
+        }
 
 		protected override void OnPaintBackground(PaintEventArgs pevent)
 		{
